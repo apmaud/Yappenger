@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
-import User from '../models/User';
-import Chat from '../models/Chat';
-import Message from '../models/Message'
+import User from '../models/User.js';
+import Chat from '../models/Chat.js';
+import Message from '../models/Message.js'
 
 
 // Get all messages in a chat

@@ -20,14 +20,15 @@ const LandingPage = () => {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="flex-start"
         gap="2rem"
+        paddingTop="1rem"
         >
             <BlockBox
-            minHeight="50px"
+            minHeight="100px"
             minWidth="450px"
             maxWidth="550px"
-            maxHeight="100px"
+            maxHeight="5rem"
             width="65%"
             height="65%"
             display="flex"
@@ -37,14 +38,15 @@ const LandingPage = () => {
                 <Typography fontSize="36px">Yappenger</Typography>
             </BlockBox>
             <BlockBox
-            minHeight="350px"
-            minWidth="450px"
-            maxWidth="550px"
-            maxHeight="400px"
-            width="65%" 
-            height="65%" 
+            // minHeight="500px"
+            // maxHeight="600px"
+            // minWidth="450px"
+            // maxWidth="550px"
+            // width="65%" 
+            // height="65%"
+            padding="4rem"
             display="flex"
-            gap="3rem"
+            gap="1rem"
             flexDirection="column"
             alignItems="center"
             justifyContent="flex-start"
@@ -64,8 +66,8 @@ const LandingPage = () => {
                 <Box
                 minHeight="200px"
                 minWidth="400px"
-                maxWidth="500px"
-                maxHeight="300px"
+                // maxWidth="500px"
+                // maxHeight="300px"
                 width="90%"
                 height="65%"
                 >

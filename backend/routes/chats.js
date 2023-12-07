@@ -1,6 +1,6 @@
 import express from 'express'
-import { getChats, accessChat, createGroupChat, renameGroupChat, removeFromGroupChat, addToGroupChat } from '../controllers/chats'
-import protect from '../middleware/auth'
+import { getChats, accessChat, createGroupChat, renameGroupChat, removeFromGroupChat, addToGroupChat } from '../controllers/chats.js'
+import protect from '../middleware/auth.js'
 
 const router = express.Router();
 

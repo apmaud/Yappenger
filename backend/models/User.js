@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import PersonIcon from '@mui/icons-material/Person';
 
 
 const Schema = mongoose.Schema;
@@ -23,7 +22,7 @@ const UserSchema = new Schema(
         pic: {
             type: "String",
             required: true,
-            default: PersonIcon,
+            default: "https://fonts.google.com/icons?selected=Material%20Symbols%20Outlined%3Aperson%3AFILL%400%3Bwght%40400%3BGRAD%400%3Bopsz%4024",
         },
         isAdmin: {
             type: Boolean,

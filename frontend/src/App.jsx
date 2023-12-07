@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import { Box } from '@mui/material'
+import Notification from './components/misc/Notification'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
           </Routes>
+          <Notification />
     </div>
   )
 }

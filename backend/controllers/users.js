@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
-import User from '../models/User';
-import generateToken from '../config/genToken';
+import User from '../models/User.js';
+import generateToken from '../config/genToken.js';
 
 
 // Get all users

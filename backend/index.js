@@ -4,13 +4,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
-import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import connectDB from './config/db';
-import userRoutes from './routes/users'
-import chatRoutes from './routes/chats'
-import messageRoutes from './routes/messages'
-
+import connectDB from './config/db.js';
+import userRoutes from './routes/users.js'
+import chatRoutes from './routes/chats.js'
+import messageRoutes from './routes/messages.js'
+import { Server} from "socket.io"
 
 // CONFIGURATIONS
 dotenv.config();
@@ -23,26 +22,25 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({credentials: true, origin:'http://127.0.0.1:5173'}));
-app.use(cookieParser());
 
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000;
 
-const server = app.listen(
-    PORT,
-    console.log(`Server running on PORT ${PORT}...`.yellow.bold)
-);
+const server = app.listen(PORT, () => {
+  console.log(`Server running on PORT ${PORT}...`)
+});
 
 
-const io = require("socket.io")(server, {
+
+const io = new Server(server, {
     pingTimeout: 60000,
     cors: {
         // credentials: true,
-        origin: "http://localhost:3000",
+        origin: "http://127.0.0.1:5173/",
     },
 });
 
