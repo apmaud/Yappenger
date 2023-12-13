@@ -9,11 +9,11 @@ import { AlertContextProvider } from './contexts/AlertProvider.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ChatProvider>
-        <AlertContextProvider>
+      <AlertContextProvider>
+        <ChatProvider>
           <App />
-        </AlertContextProvider>
-      </ChatProvider>
+        </ChatProvider>
+      </AlertContextProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )

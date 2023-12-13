@@ -103,6 +103,11 @@ const Login = () => {
             label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+              handleSubmit();
+              }
+          }}
           />
         </FormControl>
         <Button onClick={handleSubmit} type="submit" variant="contained" size="large" width="100%">Login</Button>
