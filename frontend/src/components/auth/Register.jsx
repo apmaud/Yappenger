@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChatState } from '../../contexts/ChatProvider';
 import axios from "axios";
 import { AlertContext } from '../../contexts/AlertProvider';
-import { Box, Button, FormControl, FormLabel, IconButton, Input, InputAdornment, InputLabel, OutlinedInput, Stack } from '@mui/material';
+import { Box, Button, CircularProgress, FormControl, FormLabel, IconButton, Input, InputAdornment, InputLabel, OutlinedInput, Stack } from '@mui/material';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 
@@ -15,11 +15,11 @@ const Register = () => {
   const { setUser } = ChatState();
 
   // Login form
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const [password, setPassword] = useState();
-  const [pic, setPic] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [pic, setPic] = useState("");
   const [picLoading, setPicLoading] = useState(false);
 
 
@@ -30,7 +30,7 @@ const Register = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setPicLoading(true);
+
     if(!name || !email || !password || !confirmPassword) {
       actions.addAlert({
         text: "Please fill in the registration information!",
@@ -38,7 +38,6 @@ const Register = () => {
         type: alertTypes[3],
         id: Date.now()
       });
-      setPicLoading(false);
       return;
     }
     if (password !== confirmPassword) {
@@ -192,6 +191,9 @@ const Register = () => {
           />
         </FormControl>
         <FormControl id="pic">
+          {picLoading && (
+            <CircularProgress />
+          )}
           <FormLabel>Upload your profile picture</FormLabel>
           <Input
             type="file"
@@ -200,7 +202,7 @@ const Register = () => {
             onChange={(e) => picParser(e.target.files[0])}
           />
         </FormControl>
-        <Button onClick={handleSubmit} type="submit" variant="contained" size="large" width="100%" isLoading={picLoading}>Register</Button>
+        <Button onClick={handleSubmit} type="submit" variant="contained" size="large" width="100%">Register</Button>
       </Stack>
     </Box>
   )

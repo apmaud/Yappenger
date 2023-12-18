@@ -17,13 +17,15 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import PendingIcon from '@mui/icons-material/Pending';
 import { useState } from 'react';
-import { Button, Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { Avatar, Button, Dialog, DialogContent, DialogTitle } from '@mui/material';
 import ProfileItem from '../profile/ProfileItem';
 import { useContext } from 'react';
 import { AlertContext } from '../../contexts/AlertProvider';
 import axios from 'axios';
 import { ChatState } from '../../contexts/ChatProvider';
 import { useNavigate } from 'react-router-dom';
+import { getSender } from '../../config/ChatVerification';
+import ProfileDialog from '../dialogs/ProfileDialog';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -74,6 +76,7 @@ export default function PrimarySearchAppBar() {
     const { 
         setSelectedChat,
         user,
+        setUser,
         notification,
         setNotification,
         chats,
@@ -165,13 +168,19 @@ export default function PrimarySearchAppBar() {
 
     // App Bar
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl2, setAnchorEl2] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const isMenuOpen2 = Boolean(anchorEl2);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const navigate = useNavigate();
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
+    };
+
+    const handleNotificationsMenuOpen = (event) => {
+        setAnchorEl2(event.currentTarget);
     };
 
     const handleMobileMenuClose = () => {
@@ -183,14 +192,70 @@ export default function PrimarySearchAppBar() {
         handleMobileMenuClose();
     };
 
+    const handleNotificationsMenuClose = () => {
+        setAnchorEl2(null);
+        // handleMobileMenuClose();
+    };
+
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
     const logoutHandler = () => {
         localStorage.removeItem("userInfo");
+        setUser(null);
+        setChats([]);
+        setSelectedChat(null);
+        actions.addAlert({
+            text: "Logged out successfully!",
+            title: "Success",
+            type: alertTypes[0],
+            id: Date.now()
+        });
         navigate("/");
+        
     };
+
+    const notificationsMenuId = 'primary-search-notifications-menu';
+    const renderNotificationsMenu = (
+        <Menu
+        anchorEl={anchorEl2}
+        anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        id={notificationsMenuId}
+        keepMounted
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        open={isMenuOpen2}
+        onClose={handleNotificationsMenuClose}
+        
+        >
+        <Box
+        padding="0.5rem"
+        >{!notification.length && "No New Messages"}
+        {notification.map((notif) => (
+            <MenuItem
+            key={notif._id}
+            onClick={() => {
+                setSelectedChat(notif.chat);
+                setNotification(notification.filter((n) => n !== notif));
+            }}
+            sx={{gap: "0.5rem"}}
+            >
+                <MailIcon />
+                {notif.chat.isGroupChat
+                    ? `${notif.chat.chatName}: New Message`
+                    : `${getSender(user, notif.chat.users).name}: New Message`
+                }
+            </MenuItem>
+        ))}
+        </Box>
+        </Menu>
+    );
 
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -209,7 +274,11 @@ export default function PrimarySearchAppBar() {
         open={isMenuOpen}
         onClose={handleMenuClose}
         >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <ProfileDialog
+            user={user}
+        >
+            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        </ProfileDialog>
         <MenuItem onClick={logoutHandler}>Logout</MenuItem>
         </Menu>
     );
@@ -232,20 +301,12 @@ export default function PrimarySearchAppBar() {
         onClose={handleMobileMenuClose}
         >
         <MenuItem>
-            <IconButton size="large" aria-label="show 4 new mails">
-            <Badge badgeContent={4} color="error">
-                <MailIcon />
-            </Badge>
-            </IconButton>
-            <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
             <IconButton
             size="large"
             aria-label="show 17 new notifications"
             color="inherit"
             >
-            <Badge badgeContent={17} color="error">
+            <Badge badgeContent={notification.length} color="error">
                 <NotificationsIcon />
             </Badge>
             </IconButton>
@@ -319,7 +380,7 @@ export default function PrimarySearchAppBar() {
                             <ProfileItem
                                 key={user._id}
                                 user={user}
-                                addFunction={() => accessChat(user._id)}
+                                handleFunction={() => accessChat(user._id)}
                             />
                         ))
                     )}
@@ -360,18 +421,22 @@ export default function PrimarySearchAppBar() {
                 Yappenger
                 </Typography>
                 <Box sx={{ flexGrow: 1 }} />
-                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    <IconButton size="large" aria-label="show 4 new mails">
+                <Box sx={{ display: { xs: 'none', md: 'flex', gap: ".5rem" } }}>
+                    {/* <IconButton size="large" aria-label="show 4 new mails">
                     <Badge badgeContent={4} color="error">
                         <MailIcon />
                     </Badge>
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                     size="large"
+                    edge="end"
                     aria-label="show 17 new notifications"
+                    aria-controls={notificationsMenuId}
+                    aria-haspopup="true"
+                    onClick={handleNotificationsMenuOpen}
                     >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
+                    <Badge badgeContent={notification.length} color="error">
+                        <NotificationsIcon sx={{fontSize: "2rem"}}/>
                     </Badge>
                     </IconButton>
                     <IconButton
@@ -382,7 +447,7 @@ export default function PrimarySearchAppBar() {
                     aria-haspopup="true"
                     onClick={handleProfileMenuOpen}
                     >
-                    <AccountCircle />
+                        <Avatar src={user.pic}/>
                     </IconButton>
                 </Box>
                 <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -400,6 +465,7 @@ export default function PrimarySearchAppBar() {
             </Toolbar>
         </AppBar>
         {renderMobileMenu}
+        {renderNotificationsMenu}
         {renderMenu}
         </Box>
     );

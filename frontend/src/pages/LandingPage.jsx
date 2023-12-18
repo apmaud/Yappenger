@@ -9,7 +9,6 @@ const LandingPage = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
  
     const handleTabChange = (e, tabIndex) => {
-      console.log(tabIndex);
       setCurrentTabIndex(tabIndex);
     };
     

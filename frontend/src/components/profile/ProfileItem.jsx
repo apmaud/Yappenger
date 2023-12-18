@@ -2,11 +2,12 @@ import { Avatar, Box, Button, Typography } from "@mui/material";
 import { ChatState } from "../../contexts/ChatProvider"
 
 
-const ProfileItem = (params) => {
-    
+const ProfileItem = ({ handleFunction, user }) => {
+    // const { user } = ChatState();
 
     return (
         <Box
+        onClick={handleFunction}
         bgcolor="#75E6DA"
         width="30rem"
         border="1px groove black"
@@ -17,29 +18,30 @@ const ProfileItem = (params) => {
         gap="1rem"
         padding="1rem"
         margin="1rem"
+        sx={{cursor: "pointer"}}
         >
             <Avatar 
                 sx={{ height: "3rem", width: "3rem",}}
-                src={params.user.pic}
+                src={user.pic}
             />
             <Box>
                 <Typography
                 fontSize="1rem"
                 >
-                    {params.user.name}
+                    {user.name}
                 </Typography>
                 <Typography
                 fontSize="1rem"
                 >
-                    Email : {params.user.email}
+                    Email : {user.email}
                 </Typography>
             </Box>
-            <Button
+            {/* <Button
             sx={{color: "#05445E",}}
-            onClick={params.addFunction}
+            onClick={handleFunction}
             >
                 Add
-            </Button>
+            </Button> */}
         </Box>
     )
 }

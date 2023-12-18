@@ -13,11 +13,11 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const navigate = useNavigate();
-  const { setUser } = ChatState();
+  const { setUser, user } = ChatState();
 
   // Login form
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // Notification bar
   const { actions } = useContext(AlertContext);

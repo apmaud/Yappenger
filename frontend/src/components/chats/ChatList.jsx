@@ -8,11 +8,15 @@ import { Avatar, Box, Button, CircularProgress, Grid, List, ListItem, ListItemAv
 import FolderIcon from '@mui/icons-material/Folder';
 import { getSender } from '../../config/ChatVerification';
 import ChatItem from './ChatItem';
+import GroupDialog from '../dialogs/GroupDialog';
+import { useNavigate } from 'react-router-dom';
 
-const ChatList = ({refresh}) => {
+const ChatList = ({refresh, setRefresh}) => {
   // Notification bar
   const { actions } = useContext(AlertContext);
   const alertTypes = ["success", "warning", "info", "error"];
+
+  const navigate = useNavigate();
 
   // List
   const [currentUser, setCurrentUser] = useState();
@@ -20,7 +24,8 @@ const ChatList = ({refresh}) => {
   const { 
     selectedChat, 
     setSelectedChat, 
-    user, 
+    user,
+    setUser,
     chats, 
     setChats
   } = ChatState();
@@ -72,6 +77,19 @@ const ChatList = ({refresh}) => {
     // eslint-disable-next-line
   }, [refresh])
 
+  useEffect(() => {
+    if (!user) {
+      try {
+        setUser(JSON.parse(localStorage.getItem("userInfo")))
+        setCurrentUser(JSON.parse(localStorage.getItem("userInfo")))
+        setRefresh(!refresh)
+      } catch (e) {
+        navigate("/")
+      }
+    }
+    // eslint-disable-next-line
+  }, [user]);
+
 
   return (
     <BlockBox
@@ -90,7 +108,7 @@ const ChatList = ({refresh}) => {
       >
         <Typography variant='h6'>My Chats</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Button>New Group Chat</Button>
+        <GroupDialog />
       </Box>
       {chats ? (
         <Box
@@ -106,7 +124,7 @@ const ChatList = ({refresh}) => {
           height="95%"
           backgroundColor={alpha("#75E6DA", 0.1)}
           // backgroundColor="#f6eee3"
-
+          overflow="auto"
           >
             <List
             >
@@ -155,7 +173,14 @@ const ChatList = ({refresh}) => {
           </Box>
         </Box>
       ) : (
-        <CircularProgress />
+        <CircularProgress
+        sx={{
+          height: "5rem",
+          width: "5rem",
+          margin: "auto",
+          alignSelf: "center",
+        }}
+        />
       )}
     </BlockBox>
   )

@@ -40,15 +40,20 @@ const io = new Server(server, {
     pingTimeout: 60000,
     cors: {
         // credentials: true,
-        origin: "http://127.0.0.1:5173/",
+        origin: "http://127.0.0.1:5173",
     },
 });
 
 io.on("connection", (socket) => {
     console.log("Connected to socket.io");
     socket.on("setup", (userData) => {
-      socket.join(userData._id);
-      socket.emit("connected");
+      if(!userData) {
+        console.log("USER DISCONNECTED");
+        socket.leave();
+      } else {
+        socket.join(userData._id);
+        socket.emit("connected");
+      }
     });
     
     socket.on("join chat", (room) => {
@@ -66,13 +71,17 @@ io.on("connection", (socket) => {
       chat.users.forEach((user) => {
         if (user._id === newMessageRecieved.sender._id) return;
   
-        socket.in(user._id).emit("message recieved", newMessageRecieved);
+        socket.in(user._id).emit("message received", newMessageRecieved);
       });
     });
-  
-    socket.off("setup", () => {
-      console.log("USER DISCONNECTED");
-      socket.leave(userData._id);
+    
+    socket.on("disconnect", () => {
+      if (socket.userData) {
+        console.log("USER DISCONNECTED");
+        socket.leave(socket.userData._id);
+      } else {
+        console.log("User disconnected without userData");
+      }
     });
   });
 

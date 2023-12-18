@@ -31,8 +31,8 @@ const ChatsPage = () => {
       gap="1rem"
       marginBottom="2rem"
       >
-        <ChatList refresh={refresh} />
-        <ChatBox />
+        <ChatList refresh={refresh} setRefresh={setRefresh}/>
+        <ChatBox refresh={refresh} setRefresh={setRefresh}/>
       </Box>
     </Box>
   )
