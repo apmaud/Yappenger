@@ -26,6 +26,7 @@ import { ChatState } from '../../contexts/ChatProvider';
 import { useNavigate } from 'react-router-dom';
 import { getSender } from '../../config/ChatVerification';
 import ProfileDialog from '../dialogs/ProfileDialog';
+import { useEffect } from 'react';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -328,10 +329,10 @@ export default function PrimarySearchAppBar() {
     );
 
     return (
-        <Box 
-        // sx={{ flexGrow: 1 }}
-        width="100%"
-        minWidth="60rem"
+        <Box
+        width="100vw"
+        height="25vh"
+        maxHeight="5rem"
         >
         <Dialog
         open={open}
@@ -447,7 +448,11 @@ export default function PrimarySearchAppBar() {
                     aria-haspopup="true"
                     onClick={handleProfileMenuOpen}
                     >
-                        <Avatar src={user.pic}/>
+                        {user ? (
+                            <Avatar src={user.pic}/>
+                        ): (
+                            <Avatar /> 
+                        )}
                     </IconButton>
                 </Box>
                 <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

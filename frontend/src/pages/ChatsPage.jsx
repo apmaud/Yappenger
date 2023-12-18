@@ -19,7 +19,7 @@ const ChatsPage = () => {
     flexDirection="column"
     alignItems="center"
     justifyContent="flex-start"
-    gap="2rem"
+    gap="1rem"
     >
       <Bar />
       <Box
@@ -30,6 +30,8 @@ const ChatsPage = () => {
       alignItems="center"
       gap="1rem"
       marginBottom="2rem"
+      paddingLeft="1rem"
+      paddingRight="1rem"
       >
         <ChatList refresh={refresh} setRefresh={setRefresh}/>
         <ChatBox refresh={refresh} setRefresh={setRefresh}/>

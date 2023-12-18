@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import BlockBox from "../misc/BlockBox"
 import { AlertContext } from '../../contexts/AlertProvider';
-import animationData from "./typing.json"
 import { ChatState } from '../../contexts/ChatProvider';
 import axios from 'axios';
 import io from "socket.io-client"
@@ -11,8 +10,6 @@ import { getSender, getSenderFull } from '../../config/ChatVerification';
 import ProfileDialog from '../dialogs/ProfileDialog';
 import UpdateGroupDialog from "../dialogs/UpdateGroupDialog"
 import MessageFeed from './MessageFeed';
-import Lottie from "lottie-react";
-import { useNavigate } from 'react-router-dom';
 
 const ENDPOINT = "http://localhost:8000";
 var socket, selectedChatCompare;
@@ -22,14 +19,10 @@ const ChatBox = ({ refresh, setRefresh }) => {
   const { actions } = useContext(AlertContext);
   const alertTypes = ["success", "warning", "info", "error"];
 
-  const navigate = useNavigate();
-
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
-  const [typing, setTyping] = useState(false);
-  const [istyping, setIsTyping] = useState(false);
 
   const { selectedChat, 
     setSelectedChat, 
@@ -39,15 +32,6 @@ const ChatBox = ({ refresh, setRefresh }) => {
     setNotification } 
   = ChatState();
 
-
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
 
   const getMessages = async () => {
     if (!selectedChat) return;
@@ -83,7 +67,6 @@ const ChatBox = ({ refresh, setRefresh }) => {
 
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
-      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -117,8 +100,6 @@ const ChatBox = ({ refresh, setRefresh }) => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
-    socket.on("typing", () => setIsTyping(true));
-    socket.on("stop typing", () => setIsTyping(false));
   
     // eslint-disable-next-line
   }, [user]);
@@ -146,26 +127,6 @@ const ChatBox = ({ refresh, setRefresh }) => {
     });
   });
 
-  const typingHandler = (e) => {
-    setNewMessage(e.target.value);
-
-    if (!socketConnected) return;
-
-    if (!typing) {
-      setTyping(true);
-      socket.emit("typing", selectedChat._id);
-    }
-    let lastTypingTime = new Date().getTime();
-    var timerLength = 3000;
-    setTimeout(() => {
-      var timeNow = new Date().getTime();
-      var timeDiff = timeNow - lastTypingTime;
-      if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
-        setTyping(false);
-      }
-    }, timerLength);
-  };
 
   // Auto scroll
   const listRef = useRef();
@@ -181,8 +142,9 @@ const ChatBox = ({ refresh, setRefresh }) => {
   return (
     <BlockBox
     height="100%"
-    width="60%"
-    minWidth="40rem"
+    width="100%"
+    minWidth="60vw"
+    minHeight="30rem"
     >
       {selectedChat ? (
         <Box
@@ -191,12 +153,10 @@ const ChatBox = ({ refresh, setRefresh }) => {
         flexDirection="column"
         height="100%"
         width="100%"
-
         >
           <Box
           display="flex"
           alignItems="center"
-          
           >
             <IconButton
             onClick={() => setSelectedChat("")}
@@ -238,11 +198,8 @@ const ChatBox = ({ refresh, setRefresh }) => {
               ))
             }
           </Box>
+
           <Box
-          display="flex"
-          flexDirection="column-reverse"
-          alignItems="center"
-          justifyContent="flex-start"
           sx={{
             backgroundColor: alpha("#189AB4", 0.25),
           }}
@@ -259,66 +216,46 @@ const ChatBox = ({ refresh, setRefresh }) => {
               }}
               />
             ) : (
-              <Box
-              width="100%"
-              height="100%"
-              display="flex"
-              flexDirection="column-reverse"
-              alignItems="center"
-              justifyContent="space-between"
-              >
+              <>
                 <Box
                 width="100%"
-                // backgroundColor="yellow"
+                maxHeight="75vh"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-
+                flexDirection="column-reverse"
                 >
                   <FormControl
                   sx={{
                     width: "90%",
-                    // boxShadow: "0.15rem 0.2rem 0.15rem 0.1rem rbga(0, 0, 0, .8)",
                     marginTop: "3rem",
-                    marginBottom: "3rem",
-                    // backgroundColor: "red",
+                    marginBottom: "0rem",
+
                   }}
                   variant="outlined"
                   >
-                    {istyping ? (
-                      <div>
-                        <Lottie
-                          options={defaultOptions}
-                          height={50}
-                          width={70}
-                          style={{ marginBottom: 15, marginLeft: 0 }}
-                        />
-                      </div>
-                    ) : (
-                      <></>
-                    )}
                     <InputLabel>Type a message here</InputLabel>
                     <OutlinedInput
                       label="message"
                       type="text"
                       onKeyDown={sendMessage}
                       value={newMessage}
-                      onChange={typingHandler}
                       sx={{backgroundColor: alpha("#189AB4", 0.45),}}
                     />
                   </FormControl>
+                  <Box
+                    width="100%"
+                    height="100vh"
+                    overflow="auto"
+                    backgroundColor={alpha("#189AB4", 0.45)}
+                    ref={listRef}
+                    >
+                      <MessageFeed messages={messages}/>
+                  </Box>
                 </Box>
-                <Box
-                width="100%"
-                height="100%"
-                overflow="auto"
-                backgroundColor={alpha("#189AB4", 0.45)}
-                ref={listRef}
-                >
-                  <MessageFeed messages={messages}/>
-                </Box>
-              </Box>
+                </>
             )}
+            
           </Box>
         </Box>
       ) : (

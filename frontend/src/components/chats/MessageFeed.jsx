@@ -47,9 +47,6 @@ const MessageFeed = ({ messages }) => {
 
 
     return (
-        <Box
-        over
-        >
         <List
         >
             {messages && 
@@ -85,7 +82,6 @@ const MessageFeed = ({ messages }) => {
                 </ListItem>
             ))}
         </List>
-        </Box>
     )
 }
 

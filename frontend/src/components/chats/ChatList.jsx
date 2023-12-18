@@ -94,12 +94,13 @@ const ChatList = ({refresh, setRefresh}) => {
   return (
     <BlockBox
     height="100%"
-    width="30%"
-    minWidth="20rem"
+    minWidth="30vw"
+    minHeight="30rem"
     display="flex"
     flexDirection="column"
     alignItems="center"
     justifyContent="flex-start"
+    
     >
       <Box
       margin="1rem"
