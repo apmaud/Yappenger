@@ -50,7 +50,7 @@ const ChatList = ({refresh, setRefresh}) => {
         },
       };
       const { data } = await axios.get(
-        "http://localhost:8000/api/chat", 
+        "/api/chat", 
         config
       );
       setChats(data);

@@ -117,7 +117,7 @@ export default function PrimarySearchAppBar() {
               };
         
             const { data } = await axios.get(
-                `http://localhost:8000/api/user?search=${search}`, 
+                `/api/user?search=${search}`, 
                 config
             );
             
@@ -143,7 +143,7 @@ export default function PrimarySearchAppBar() {
                 },
             };
             const { data } = await axios.post(
-                `http://localhost:8000/api/chat`, 
+                `/api/chat`, 
                 { userId }, 
                 config
             );

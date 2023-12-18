@@ -58,7 +58,7 @@ const Register = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:8000/api/user",
+        "/api/user",
         { name, email, password, pic, },
         config
       );
@@ -100,8 +100,8 @@ const Register = () => {
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "yappenger");
-      data.append("cloud_name", import.meta.env.VITE_CLOUD_NAME)
-      fetch(import.meta.env.VITE_CLOUD_API, {
+      data.append("cloud_name", "dhqmtc4wx")
+      fetch("https://api.cloudinary.com/v1_1/dhqmtc4wx/image/upload", {
         method: "POST",
         body: data,
         mode: 'cors',
