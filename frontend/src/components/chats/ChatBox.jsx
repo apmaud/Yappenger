@@ -11,7 +11,7 @@ import ProfileDialog from '../dialogs/ProfileDialog';
 import UpdateGroupDialog from "../dialogs/UpdateGroupDialog"
 import MessageFeed from './MessageFeed';
 
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = "https://yappenger.onrender.com";
 var socket, selectedChatCompare;
 
 const ChatBox = ({ refresh, setRefresh }) => {
