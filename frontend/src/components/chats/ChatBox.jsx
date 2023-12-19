@@ -65,8 +65,7 @@ const ChatBox = ({ refresh, setRefresh }) => {
 
   }
 
-  const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+  const sendMessage = async () => {
       try {
         const config = {
           headers: {
@@ -93,7 +92,6 @@ const ChatBox = ({ refresh, setRefresh }) => {
           id: Date.now()
         });
       }
-    }
   };
 
   useEffect(() => {
@@ -238,8 +236,13 @@ const ChatBox = ({ refresh, setRefresh }) => {
                     <OutlinedInput
                       label="message"
                       type="text"
-                      onKeyDown={sendMessage}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                        sendMessage();
+                        }
+                      }}
                       value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
                       sx={{backgroundColor: alpha("#189AB4", 0.45),}}
                     />
                   </FormControl>
