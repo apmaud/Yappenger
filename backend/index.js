@@ -17,7 +17,16 @@ dotenv.config();
 connectDB();
 const app = express();
 app.use(express.json());
-app.use(helmet());
+app.use(helmet
+  ({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        'script-src': ["'self'", "http://res.cloudinary.com/dhqmtc4wx/image/upload/"]
+      }
+    }
+  })
+);
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json());
@@ -28,6 +37,8 @@ app.use(cors({credentials: true, origin:'http://127.0.0.1:5173'}));
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+
+
 
 
 const __dirname1 = path.resolve();
