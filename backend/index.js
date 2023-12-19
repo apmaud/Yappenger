@@ -22,7 +22,7 @@ app.use(helmet
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        'script-src': ["'self'", "http://res.cloudinary.com/dhqmtc4wx/image/upload/"]
+        'img-src': ["'self'", "http://res.cloudinary.com/dhqmtc4wx/image/upload/"]
       }
     }
   })
