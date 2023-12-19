@@ -23,7 +23,7 @@ app.use(helmet
       useDefaults: true,
       directives: {
         'img-src': ["'self'", "http://res.cloudinary.com/dhqmtc4wx/image/upload/"],
-        'connect-src': ["'self'", "http://res.cloudinary.com/v1_1/dhqmtc4wx/"],
+        'connect-src': ["'self'", "https://api.cloudinary.com/v1_1/dhqmtc4wx/image/upload"],
         'default-src': ["'self'", "http://localhost:8000/"]
       }
     }
