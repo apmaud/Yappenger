@@ -125,7 +125,7 @@ const ChatList = ({refresh, setRefresh}) => {
           height="95%"
           backgroundColor={alpha("#75E6DA", 0.1)}
           // backgroundColor="#f6eee3"
-          overflow="auto"
+          overflow="scroll"
           >
             <List
             >

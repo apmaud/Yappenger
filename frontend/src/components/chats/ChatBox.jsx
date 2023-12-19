@@ -249,7 +249,7 @@ const ChatBox = ({ refresh, setRefresh }) => {
                   <Box
                     width="100%"
                     height="100vh"
-                    overflow="auto"
+                    overflow="scroll"
                     backgroundColor={alpha("#189AB4", 0.45)}
                     ref={listRef}
                     >
