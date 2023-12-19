@@ -22,7 +22,8 @@ app.use(helmet
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        'img-src': ["'self'", "http://res.cloudinary.com/dhqmtc4wx/image/upload/"]
+        'img-src': ["'self'", "http://res.cloudinary.com/dhqmtc4wx/image/upload/"],
+        'default-src': ["'self'", "http://localhost:8000/"]
       }
     }
   })
